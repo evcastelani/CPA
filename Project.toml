@@ -1,0 +1,8 @@
+name = "CPA"
+uuid = "09058527-d4ac-4736-83f0-2ed3fa14af6f"
+authors = ["evcastelani <emersonvitor@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+Mustache = "ffc61752-8dc7-55ee-8c37-f3e9cdd09e70"

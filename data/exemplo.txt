@@ -1,0 +1,7 @@
+Este é um teste.
+
+Neste teste, iremos importar o curso {{nome}}.
+
+No curso {{nome}} temos {{matriculados}}, dos quais {{respondentes}} são respondentes. 
+
+É isso...
