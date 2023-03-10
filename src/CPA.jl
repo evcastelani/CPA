@@ -21,6 +21,14 @@ struct Info_de_Curso
     nome :: String
     respondentes :: Int64
     matriculados :: Int64
+    participacao :: Float64
+    indicadores :: Vector{String}
+    valores :: Vector{Union{Int64,Float64}}
+    texto :: String
+    function Info_de_Curso(a,b,c,i,v,t)
+        d = (b/c)*100
+        new(a,b,c,round(d,digits=1),i,v,t)
+    end
 end
 
 
@@ -56,6 +64,9 @@ function ler_template(filename::String)
     return Template(Mustache.load(filename))
 end
 
+function lista()
+
+end
 """
     interpola
 
