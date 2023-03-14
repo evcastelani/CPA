@@ -24,10 +24,19 @@ struct Info_de_Curso
     participacao :: Float64
     indicadores :: Vector{String}
     valores :: Vector{Union{Int64,Float64}}
+    texto_chave :: String
     texto :: String
-    function Info_de_Curso(a,b,c,i,v,t)
-        d = (b/c)*100
-        new(a,b,c,round(d,digits=1),i,v,t)
+    grafico :: String
+    tabela :: String 
+    function Info_de_Curso(_nome,_respondentes,_matriculados,_indicadores,_valores,_texto_chave)
+        _participacao = (_respondentes/_matriculados)*100
+        _texto = "NONE"
+        _tabela = "NONE"
+        _grafico = "NONE"
+        if occursin(r"{{.*?lista=true.*?}}",_texto_chave)
+            _texto = "Preciso gerar a lista ordenada"
+        end
+        new(_nome,_respondentes,_matriculados,round(_participacao,digits=1),_indicadores,_valores,_texto_chave,_texto,_grafico,_tabela)
     end
 end
 
