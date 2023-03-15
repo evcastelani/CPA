@@ -1,5 +1,6 @@
 module CPA
 using Mustache, CSV
+import Plots
 
 export Info_de_Curso, Template, interpola,ler_template
 
@@ -34,7 +35,24 @@ struct Info_de_Curso
         _tabela = "NONE"
         _grafico = "NONE"
         if occursin(r"{{.*?lista=true.*?}}",_texto_chave)
-            _texto = "Preciso gerar a lista ordenada"
+            _texto = "Temos o seguinte resultado:"
+            for i=1:length(_valores)-1
+                for j=i+1:length(_valores)
+                    if _valores[i]<_valores[j]
+                        aux_val = _valores[j]
+                        aux_ind = _indicadores[j] 
+                        _valores[j] = _valores[i]
+                        _valores[i] = aux_val
+                        _indicadores[j] = _indicadores[i]
+                        _indicadores[i] = aux_ind
+                    end
+                end
+                _texto = string(_texto,"""\n 1. $(_valores[i]) responderam "$(_indicadores[i])";""")
+            end
+            _texto = string(_texto,"""\n 1. $(_valores[end]) responderam "$(_indicadores[end])".""")
+        end
+        if occursin(r"{{.*?tabela=true.*?}}",_texto_chave)
+            save(Plots.pie(_indicadores,_valores,l=0.5),"image_teste.pdf")
         end
         new(_nome,_respondentes,_matriculados,round(_participacao,digits=1),_indicadores,_valores,_texto_chave,_texto,_grafico,_tabela)
     end
