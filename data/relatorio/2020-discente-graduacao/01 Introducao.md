@@ -26,9 +26,9 @@ A avaliação é composta pelos indicadores, conforme aponta o Quadro 1.
 
 Quadro 1- Grupos de indicadores da Avaliação Institucional de Cursos
 
-
-| PARTE I - Avaliação discente geral                                         | 1. Informações sobre Saúde <br>2. Atendimento remoto aos alunos <br>3. Comunicação da UEM <br>4. O Instrumento de Avaliação |
+| Partes | |
 |----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| PARTE I - Avaliação discente geral                                         | 1. Informações sobre Saúde <br>2. Atendimento remoto aos alunos <br>3. Comunicação da UEM <br>4. O Instrumento de Avaliação |
 | PARTE II - Sobre as disciplinas e os docentes                              | 5. Disciplina/professor                                                                                                     |
 | PARTE III - Sobre o Estágio e sobre o Trabalho de Conclusão do Curso (TCC) | 6. O Estágio (diferenciar disciplina de estágio)<br>7. O TCC                                                                |
 
@@ -107,9 +107,9 @@ No Quadro 2 estão sistematizados os resultados da avaliação discente, por Gru
 
 Quadro 2- Avaliação discente do **Curso de %curso%** de acordo com os Grupos de indicadores, 2020
 
-  | Partes                                                                                                 |      |      |      |      |
+| Partes                                                                                                 | Ótimo | Bom |Regular | Insuficiente|
 |--------------------------------------------------------------------------------------------------------|------|------|------|------|
-| PARTE I - Avaliação discente geral                                                                     | O    | B    | R    | I    |
+| PARTE I - Avaliação discente geral                                                                     | | | | |
 |                                                                                                   2020 | 25,2 | 43,7 | 21,0 | 10,1 |
 | PARTE II - Avaliação discente sobre as disciplinas e os docentes                                       |      |      |      |      |
 |                                                                                                   2020 | 52,0 | 30,0 | 11,4 | 6,6  |
