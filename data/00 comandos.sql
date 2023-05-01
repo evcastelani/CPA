@@ -1,4 +1,7 @@
-# Comando para obter a lista de Respondentes por Curso
+# Em revisão. 
+---
+
+## Comando para obter a lista de Respondentes por Curso
 SELECT nome_do_curso, MAX(total_do_curso) AS Respondentes FROM avaliacao_discente_ere_2020 GROUP BY nome_do_curso;
 
 # Obter a lista de centro, cursos e matriculados de 2020
