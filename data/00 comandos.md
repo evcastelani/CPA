@@ -25,7 +25,7 @@ SELECT nome_do_curso, MAX(total_do_curso) AS Respondentes FROM avaliacao_discent
 ```
 SELECT * 
 FROM 
-    centros_e_cursos 
+    cursos_e_centros 
 WHERE 
     ano_referencia=2021 
 ORDER BY 
@@ -69,5 +69,33 @@ FROM
 where 
 	cc.codigo_curso=ad.codigo_curso AND 
     cc.ano_referencia = 2021;
+
+```
+
+## Filtro aplicado ao CCE
+
+Formatação do filtro por Centro e Por período de 2020.
+
+```
+SELECT 
+	cc.nome_do_curso,
+	ad.cd_subgrupo,
+    ad.nm_subgrupo,
+    ad.nu_pergunta,
+    ad.pergunta,
+    ad.ordem_opções,
+    ad.opção,
+    ad.porcentagem,
+    ad.respostas,
+    ad.total_do_curso
+FROM 
+	avaliacao_discente_ere_2020 ad, cursos_e_centros cc 
+WHERE
+	ad.codigo_curso=cc.Codigo_Curso
+    AND
+    cc.ano_referencia=2020
+    AND 
+    cc.centro_de_ensino="CCE";
+    
 
 ```
