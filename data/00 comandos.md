@@ -1,6 +1,6 @@
 # Comandos para definição de Consultas
 ----
-Faço um exercício com alguns comandos de SQL para facilitar o trabalho com os Datasets.
+Faço um exercício com alguns comandos de SQL para facilitar o trabalho com os DataFrames.
 
 Para trabalhar melhor os dados, preferi manter a tabela original de dados vindo do NPD. Somente será necessário acrescentar o código do curso na primeira coluna, conforme indica a imagem abaixo.
 
@@ -23,8 +23,8 @@ Acredito que em breve, vamos ter que trabalhar com outro tipo de código para fa
 - [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-refer-ncia)
 - [Listagem de Matriculados e Respondentes por Centro em um ano específico](#listagem-de-matriculados-e-respondentes-por-centro-em-um-ano-espec-fico)
 
-
-
+## Importante
+É interessante que os DataFrames tenham o mesmo nome do arquivo CSV, pois assim facilita a consulta usando os comandos abaixo.
 ----
 
 
