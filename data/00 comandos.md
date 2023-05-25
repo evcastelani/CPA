@@ -12,15 +12,19 @@ https://sqliteonline.com/
 
 Assim não é necessário instalar um servidor de banco de dados ou um app para trabalhar com SQLite. 
 
+## Importante
+Talvez facilite o trabalho, se a variável do DataFrame tiver o mesmo nome do arquivo que está sendo importado pelo CSV. 
+
+
 
 # Índice dos comandos
   
 * [Obter a lista de Respondentes por Curso](#obter-a-lista-de-respondentes-por-curso)
-* [Obter a lista de centro, cursos e matriculados de 2021](#obter-a-lista-de-centro--cursos-e-matriculados-de-2021)
-- [Exercício para Concatenar as duas buscas](#exerc-cio-para-concatenar-as-duas-buscas)
+* [Obter a lista de centro, cursos e matriculados de 2021](#obter-a-lista-de-centro,-cursos-e-matriculados-de-2021)
+- [Exercício para Concatenar as duas buscas](#exercício-para-concatenar-as-duas-buscas)
   * [Filtro aplicado ao CCE](#filtro-aplicado-ao-cce)
-  * [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-refer-ncia)
-  * [Listagem de Matriculados e Respondentes por Centro em um ano específico](#listagem-de-matriculados-e-respondentes-por-centro-em-um-ano-espec-fico)
+  * [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-referência)
+  * [Listagem de Matriculados e Respondentes por Centro em um ano específico](#listagem-de-matriculados-e-respondentes-por-centro-em-um-ano-específico)
 
 
 
