@@ -158,22 +158,26 @@ ORDER BY
 
 ## Listagem de Matriculados e Respondentes por Centro em um ano específico
 
-Esse aqui foi um pouco mais complicado, pois ele trabalha com uma tabela combinada, dentro de outra combinada. 
+Essa consulta é um pouquinho mais complicada. Ou talvez, eu tenha complicado, não sei. 
 
-Com certeza existe uma forma mais elegante para resolver. 
+Nessa consulta trabalhamos tabelas combinadas em dois níveis. Primeiro, fazemos um filtro por todos os cursos separados por Centro. Em seguida, fazemos um novo filtro direcionado aos centros. De repente pode ter uma forma mais simples de se resolver essa formatação. Se tiver, posso repensar essa consulta. Mas acredito que pelo tamanho das tabelas, ela não será tão pesada assim. 
 
-Mas ele retorna as seguintes variáveis:
-- Centro de Ensino
-- Número de Respondentes
-- Número de Matriculados
+A consulta SELECT retorna as seguintes variáveis. 
+- Centro de Ensino (centro_de_ensino)
+- Nome melhor descrito do Centro de Ensino (centro_descricao)
+- Número de Respondentes (Respondentes)
+- Número de Matriculados (Matriculados)
+- Porcentagem dos Respondentes em relação aos matriculados (Porcentagem)
 
 Lembrando que ele faz um filtro para um determinado ano.
 
 ```
 SELECT 
-	centro_de_ensino,
-    sum(Respondentes) Respondentes,
-    sum(Matriculados) Matriculados
+	geral.centro_de_ensino,
+    cd.centro_descricao,
+    sum(geral.Respondentes) Respondentes,
+    sum(geral.Matriculados) Matriculados, 
+    CAST(Respondentes AS FLOAT) / CAST(Matriculados AS FLOAT) * 100 as Porcentagem
 FROM	
   (SELECT
       cc.Centro_de_Ensino,
@@ -186,14 +190,24 @@ FROM
       JOIN
       cursos_e_centros cc
   WHERE
+
+      /* Aqui entra a definição do ano para puxar os matriculados */
       cc.ano_referencia = 2020
       AND	
       ad.codigo_curso = cc.codigo_curso
   GROUP BY 
-      ad.nome_do_curso)
+      ad.nome_do_curso) geral 
+      JOIN
+      centros_e_diretores cd
+WHERE
+	geral.centro_de_ensino = cd.centro_de_ensino
 GROUP BY 
-	centro_de_ensino
+	geral.centro_de_ensino
 ORDER BY
-	centro_de_ensino
+	geral.centro_de_ensino
 
 ```
+
+Resultado esperado da consulta.
+
+![Resultado do Nested Query](img/2023-05-25_09-12.png)
