@@ -1,4 +1,4 @@
-# Alguns comandos para usar na seleção de dados
+# Comandos para definição de Consultas
 ----
 Faço um exercício com alguns comandos de SQL para facilitar o trabalho com os Datasets.
 
@@ -12,19 +12,16 @@ https://sqliteonline.com/
 
 Assim não é necessário instalar um servidor de banco de dados ou um app para trabalhar com SQLite. 
 
-## Importante
-Talvez facilite o trabalho, se a variável do DataFrame tiver o mesmo nome do arquivo que está sendo importado pelo CSV. 
+Acredito que em breve, vamos ter que trabalhar com outro tipo de código para fazer a combinação entre tabelas. 
 
-
-
-# Índice dos comandos
+# Índice de comandos
   
 * [Obter a lista de Respondentes por Curso](#obter-a-lista-de-respondentes-por-curso)
-* [Obter a lista de centro, cursos e matriculados de 2021](#obter-a-lista-de-centro,-cursos-e-matriculados-de-2021)
-- [Exercício para Concatenar as duas buscas](#exercício-para-concatenar-as-duas-buscas)
+* [Obter a lista de centro, cursos e matriculados no ano de 2021](#obter-a-lista-de-centro--cursos-e-matriculados-de-2021)
+- [Concatenar as duas buscas](#exerc-cio-para-concatenar-as-duas-buscas)
   * [Filtro aplicado ao CCE](#filtro-aplicado-ao-cce)
-  * [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-referência)
-  * [Listagem de Matriculados e Respondentes por Centro em um ano específico](#listagem-de-matriculados-e-respondentes-por-centro-em-um-ano-específico)
+- [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-refer-ncia)
+- [Listagem de Matriculados e Respondentes por Centro em um ano específico](#listagem-de-matriculados-e-respondentes-por-centro-em-um-ano-espec-fico)
 
 
 
@@ -36,7 +33,13 @@ Talvez facilite o trabalho, se a variável do DataFrame tiver o mesmo nome do ar
 Um comando rápido para calcular o total de respondentes. 
 
 ```
-SELECT nome_do_curso, MAX(total_do_curso) AS Respondentes FROM avaliacao_discente_ere_2020 GROUP BY nome_do_curso;
+SELECT 
+    nome_do_curso, 
+    MAX(total_do_curso) AS Respondentes 
+FROM 
+    avaliacao_discente_ere_2020 
+GROUP BY 
+    nome_do_curso;
 ```
 
 ## Obter a lista de centro, cursos e matriculados de 2021
@@ -123,7 +126,7 @@ WHERE
 
 ```
 
-## Tabela de Cursos por Centro de Ensino e Ano de Referência
+# Tabela de Cursos por Centro de Ensino e Ano de Referência
 Nessa tabela, listamos as seguintes variáveis. 
 - Código do curso
 - Nome do Curso
@@ -160,7 +163,7 @@ ORDER BY
 
 ```
 
-## Listagem de Matriculados e Respondentes por Centro em um ano específico
+# Listagem de Matriculados e Respondentes por Centro em um ano específico
 
 Essa consulta é um pouquinho mais complicada. Ou talvez, eu tenha complicado, não sei. 
 
@@ -183,26 +186,26 @@ SELECT
     sum(geral.Matriculados) Matriculados, 
     CAST(Respondentes AS FLOAT) / CAST(Matriculados AS FLOAT) * 100 as Porcentagem
 FROM	
-  (SELECT
-      cc.Centro_de_Ensino,
-      ad.Nome_do_Curso,
-      max(ad.total_do_curso) as Respondentes,
-      cc.Matriculados
+    (SELECT
+        cc.Centro_de_Ensino,
+        ad.Nome_do_Curso,
+        max(ad.total_do_curso) as Respondentes,
+        cc.Matriculados
 
-  FROM 
-      avaliacao_discente_ere_2020 ad
-      JOIN
-      cursos_e_centros cc
-  WHERE
+    FROM 
+        avaliacao_discente_ere_2020 ad
+        JOIN
+        cursos_e_centros cc
+    WHERE
 
-      /* Aqui entra a definição do ano para puxar os matriculados */
-      cc.ano_referencia = 2020
-      AND	
-      ad.codigo_curso = cc.codigo_curso
-  GROUP BY 
-      ad.nome_do_curso) geral 
-      JOIN
-      centros_e_diretores cd
+        /* Aqui entra a definição do ano para puxar os matriculados */
+        cc.ano_referencia = 2020
+        AND	
+        ad.codigo_curso = cc.codigo_curso
+    GROUP BY 
+        ad.nome_do_curso) geral 
+        JOIN
+        centros_e_diretores cd
 WHERE
 	geral.centro_de_ensino = cd.centro_de_ensino
 GROUP BY 
@@ -212,6 +215,6 @@ ORDER BY
 
 ```
 
-Resultado esperado da consulta.
+Resultado esperado por essa consulta.
 
 ![Resultado do Nested Query](img/2023-05-25_09-12.png)
