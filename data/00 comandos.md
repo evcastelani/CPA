@@ -161,14 +161,14 @@ ORDER BY
 
 Essa consulta é um pouquinho mais complicada. Ou talvez, eu tenha complicado, não sei. 
 
-Nessa consulta trabalhamos tabelas combinadas em dois níveis. Primeiro, fazemos um filtro por todos os cursos separados por Centro. Em seguida, fazemos um novo filtro direcionado aos centros. De repente pode ter uma forma mais simples de se resolver essa formatação. Se tiver, posso repensar essa consulta. Mas acredito que pelo tamanho das tabelas, ela não será tão pesada assim. 
+Nessa consulta trabalhamos tabelas combinadas em dois níveis. Primeiro, fazemos um filtro por todos os cursos separados por Centro. Em seguida, fazemos um novo filtro direcionado aos centros. De repente pode ter uma forma mais simples de se resolver essa formatação. Se tiver, posso repensar essa consulta. Acredito que pelo tamanho das tabelas, ela não será tão pesada assim. 
 
 A consulta SELECT retorna as seguintes variáveis. 
-- Centro de Ensino (centro_de_ensino)
-- Nome melhor descrito do Centro de Ensino (centro_descricao)
-- Número de Respondentes (Respondentes)
-- Número de Matriculados (Matriculados)
-- Porcentagem dos Respondentes em relação aos matriculados (Porcentagem)
+- centro_de_ensino - Centro de Ensino abreviado
+- centro_descricao - Nome melhor descrito do Centro de Ensino
+- Respondentes - Número de Respondentes
+- Matriculados - Número de Matriculados
+- Porcentagem - Porcentagem dos Respondentes em relação aos matriculados
 
 Lembrando que ele faz um filtro para um determinado ano.
 
