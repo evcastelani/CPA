@@ -14,20 +14,14 @@ Assim não é necessário instalar um servidor de banco de dados ou um app para 
 
 Acredito que em breve, vamos ter que trabalhar com outro tipo de código para fazer a combinação entre tabelas. 
 
-# Índice de comandos
-  
-* [Obter a lista de Respondentes por Curso](#obter-a-lista-de-respondentes-por-curso)
-* [Obter a lista de centro, cursos e matriculados no ano de 2021](#obter-a-lista-de-centro--cursos-e-matriculados-de-2021)
-- [Concatenar as duas buscas](#exerc-cio-para-concatenar-as-duas-buscas)
-  * [Filtro aplicado ao CCE](#filtro-aplicado-ao-cce)
-- [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-refer-ncia)
-- [Listagem de Matriculados e Respondentes por Centro em um ano específico](#listagem-de-matriculados-e-respondentes-por-centro-em-um-ano-espec-fico)
 
 ## Importante
 É interessante que os DataFrames tenham o mesmo nome do arquivo CSV, pois assim facilita a consulta usando os comandos abaixo.
+
+
 ----
 
-
+# Consulta por cursos
 
 ## Obter a lista de Respondentes por Curso
 Um comando rápido para calcular o total de respondentes. 
@@ -56,7 +50,7 @@ ORDER BY
     centro_de_ensino, nome_do_curso;
 ```
 
-# Exercício para Concatenar as duas buscas
+## Concatenar as duas buscas
 Nessa parte eu tento combinar as duas buscas para facilitar o trabalho de consulta às tabelas. 
 
 ```
