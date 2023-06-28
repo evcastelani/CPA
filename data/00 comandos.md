@@ -104,6 +104,10 @@ where
 
 ```
 
+Resultado esperado:
+
+![](img/2023-06-28_16-16.png)
+
 ## Filtro aplicado ao CCE
 
 Formatação do filtro por Centro e Por período de 2020.
@@ -133,6 +137,10 @@ WHERE
     
 
 ```
+
+Resultado esperado:
+
+![](img/2023-06-28_16-15.png)
 
 ## Tabela de Cursos por Centro de Ensino e Ano de Referência
 Nessa tabela, listamos as seguintes variáveis. 
@@ -170,6 +178,10 @@ ORDER BY
 
 
 ```
+
+Resultado esperado:
+
+![](img/2023-06-28_16-14.png)
 
 # Tabelas de Índices Respondentes e Matriculados
 
