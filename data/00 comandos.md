@@ -43,7 +43,7 @@ Um comando rápido para calcular o total de respondentes.
 ```
 SELECT 
     nome_do_curso, 
-    MAX(total_do_curso) AS Respondentes 
+    MIN(total_do_curso) AS Respondentes 
 FROM 
     avaliacao_discente_ere_2020 
 GROUP BY 
