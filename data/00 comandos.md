@@ -34,7 +34,6 @@ Acredito que em breve, vamos ter que trabalhar com outro tipo de código para fa
 - [Tabelas de Índices Respondentes e Matriculados](#tabelas-de-índices-respondentes-e-matriculados)
   - [Respondentes, Matriculados e Índice por Curso](#respondentes-matriculados-e-índice-por-curso)
   - [Matriculados e Respondentes por Centro em um ano específico](#matriculados-e-respondentes-por-centro-em-um-ano-específico)
-  - [Respondentes, Matriculados e Porcentagem por Centro de Ensino](#respondentes-matriculados-e-porcentagem-por-centro-de-ensino)
   - [Respondentes, Matriculados e Porcentagem de toda a instituição](#respondentes-matriculados-e-porcentagem-de-toda-a-instituição)
 
 
@@ -211,57 +210,6 @@ Essa consulta é um pouquinho mais complicada. Ou talvez, eu tenha complicado, n
 
 Nessa consulta trabalhamos tabelas combinadas em dois níveis. Primeiro, fazemos um filtro por todos os cursos separados por Centro. Em seguida, fazemos um novo filtro direcionado aos centros. De repente pode ter uma forma mais simples de se resolver essa formatação. Se tiver, posso repensar essa consulta. Acredito que pelo tamanho das tabelas, ela não será tão pesada assim. 
 
-A consulta SELECT retorna as seguintes variáveis. 
-- centro_de_ensino - Centro de Ensino abreviado
-- centro_descricao - Nome melhor descrito do Centro de Ensino
-- Respondentes - Número de Respondentes
-- Matriculados - Número de Matriculados
-- Porcentagem - Porcentagem dos Respondentes em relação aos matriculados
-
-Lembrando que ele faz um filtro para um determinado ano.
-
-```
-SELECT 
-	geral.centro_de_ensino,
-    cd.centro_descricao,
-    sum(geral.Respondentes) Respondentes,
-    sum(geral.Matriculados) Matriculados, 
-    CAST(Respondentes AS FLOAT) / CAST(Matriculados AS FLOAT) * 100 as Porcentagem
-FROM	
-    (SELECT
-        cc.Centro_de_Ensino,
-        ad.Nome_do_Curso,
-        min(ad.total_do_curso) as Respondentes,
-        cc.Matriculados
-
-    FROM 
-        avaliacao_discente_ere_2020 ad
-        JOIN
-        cursos_e_centros cc
-    WHERE
-
-        /* Aqui entra a definição do ano para puxar os matriculados */
-        cc.ano_referencia = 2020
-        AND	
-        ad.codigo_curso = cc.codigo_curso
-    GROUP BY 
-        ad.nome_do_curso) geral 
-        JOIN
-        centros_e_diretores cd
-WHERE
-	geral.centro_de_ensino = cd.centro_de_ensino
-GROUP BY max
-	geral.centro_de_ensino
-ORDER BY
-	geral.centro_de_ensino
-
-```
-
-Resultado esperado por essa consulta.
-
-![Resultado do Nested Query](img/2023-05-25_09-12.png)
-
-## Respondentes, Matriculados e Porcentagem por Centro de Ensino
 Essa consulta aproveita o SELECT feito na seção anterior. Como resultado teremos os seguintes dados:
 
 - Centro de Ensino (sigla)
@@ -306,6 +254,10 @@ ORDER BY
 
 ```
 
+Resultado da consulta:
+
+![Resultado do Nested Query](img/2023-06-28_15-57.png)
+
 ## Respondentes, Matriculados e Porcentagem de toda a instituição
 
 Essa consulta aproveita o SELECT da seção anterior e somente faz um somatório, retorna os seguintes dados:
@@ -317,8 +269,8 @@ Essa consulta aproveita o SELECT da seção anterior e somente faz um somatório
 
 ````
 SELECT 
-    sum(geral.Respondentes),
-    sum(geral.Matriculados),
+    sum(geral.Respondentes) Total_Respondentes,
+    sum(geral.Matriculados) Total_Matriculados,
     CAST(sum(Respondentes) as float) / CAST(sum(Matriculados)  as float) * 100 as Porcentagem
 FROM 
     (SELECT 
@@ -354,6 +306,7 @@ FROM
     ORDER BY
         centros.centro_de_ensino) geral
 
-
-
 ````
+Resultado esperado:
+
+![](img/2023-06-28_16-01.png)
