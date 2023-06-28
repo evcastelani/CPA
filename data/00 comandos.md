@@ -23,6 +23,21 @@ Acredito que em breve, vamos ter que trabalhar com outro tipo de código para fa
 
 # Consulta por cursos
 
+- [Comandos para definição de Consultas](#comandos-para-definição-de-consultas)
+  - [Importante](#importante)
+- [Consulta por cursos](#consulta-por-cursos)
+  - [Obter a lista de Respondentes por Curso](#obter-a-lista-de-respondentes-por-curso)
+  - [Obter a lista de centro, cursos e matriculados de 2021](#obter-a-lista-de-centro-cursos-e-matriculados-de-2021)
+  - [Concatenar as duas buscas](#concatenar-as-duas-buscas)
+  - [Filtro aplicado ao CCE](#filtro-aplicado-ao-cce)
+  - [Tabela de Cursos por Centro de Ensino e Ano de Referência](#tabela-de-cursos-por-centro-de-ensino-e-ano-de-referência)
+- [Tabelas de Índices Respondentes e Matriculados](#tabelas-de-índices-respondentes-e-matriculados)
+  - [Respondentes, Matriculados e Índice por Curso](#respondentes-matriculados-e-índice-por-curso)
+  - [Matriculados e Respondentes por Centro em um ano específico](#matriculados-e-respondentes-por-centro-em-um-ano-específico)
+  - [Respondentes, Matriculados e Porcentagem por Centro de Ensino](#respondentes-matriculados-e-porcentagem-por-centro-de-ensino)
+  - [Respondentes, Matriculados e Porcentagem de toda a instituição](#respondentes-matriculados-e-porcentagem-de-toda-a-instituição)
+
+
 ## Obter a lista de Respondentes por Curso
 Um comando rápido para calcular o total de respondentes. 
 
@@ -120,7 +135,7 @@ WHERE
 
 ```
 
-# Tabela de Cursos por Centro de Ensino e Ano de Referência
+## Tabela de Cursos por Centro de Ensino e Ano de Referência
 Nessa tabela, listamos as seguintes variáveis. 
 - Código do curso
 - Nome do Curso
@@ -157,7 +172,40 @@ ORDER BY
 
 ```
 
-# Listagem de Matriculados e Respondentes por Centro em um ano específico
+# Tabelas de Índices Respondentes e Matriculados
+
+## Respondentes, Matriculados e Índice por Curso
+
+Após definir o ano específico, a tabela retornará as seguintes informações:
+- Nome do Curso
+- Centro de Ensino
+- Total de Respondentes a partir do valor mínimo
+- Número de matriculados
+- Porcentagem entre os respondentes e os matriculados
+
+````
+SELECT 
+	cc.nome_do_curso, 
+    cc.centro_de_ensino, 
+    min(ad.total_do_curso) as total_respondentes, 
+    cc.matriculados as total_matriculados,
+    CAST(Min(ad.total_do_curso) AS FLOAT) / CAST(cc.matriculados AS FLOAT) * 100 as Porcentagem
+FROM 
+	avaliacao_discente_ere_2020 ad, 
+    cursos_e_centros cc 
+WHERE
+	ad.codigo_curso = cc.codigo_curso 
+  and
+  	cc.ano_referencia = "2020"
+group by 
+	ad.nome_do_curso
+````
+
+Tabela resultado.
+
+![Nested Image](img/2023-06-28_14-50.png)
+
+## Matriculados e Respondentes por Centro em um ano específico
 
 Essa consulta é um pouquinho mais complicada. Ou talvez, eu tenha complicado, não sei. 
 
@@ -183,7 +231,7 @@ FROM
     (SELECT
         cc.Centro_de_Ensino,
         ad.Nome_do_Curso,
-        max(ad.total_do_curso) as Respondentes,
+        min(ad.total_do_curso) as Respondentes,
         cc.Matriculados
 
     FROM 
@@ -202,7 +250,7 @@ FROM
         centros_e_diretores cd
 WHERE
 	geral.centro_de_ensino = cd.centro_de_ensino
-GROUP BY 
+GROUP BY max
 	geral.centro_de_ensino
 ORDER BY
 	geral.centro_de_ensino
@@ -212,3 +260,100 @@ ORDER BY
 Resultado esperado por essa consulta.
 
 ![Resultado do Nested Query](img/2023-05-25_09-12.png)
+
+## Respondentes, Matriculados e Porcentagem por Centro de Ensino
+Essa consulta aproveita o SELECT feito na seção anterior. Como resultado teremos os seguintes dados:
+
+- Centro de Ensino (sigla)
+- Centro de Ensino (descrição)
+- Total dos respondentes por Centro
+- Total de Matriculados por Centro
+- Porcentagem entre os Respondentes e Matriculados
+
+```
+SELECT 
+	centros.centro_de_ensino,
+    cd.centro_descricao,
+    sum(centros.Respondentes) Respondentes,
+    sum(centros.Matriculados) Matriculados, 
+    CAST(sum(centros.Respondentes) AS FLOAT) / CAST(sum(centros.Matriculados) AS FLOAT) * 100 as Porcentagem
+FROM	
+    (SELECT
+        cc.Centro_de_Ensino as Centro_de_Ensino,
+        ad.Nome_do_Curso as Nome_do_Curso,
+        min(ad.total_do_curso) as Respondentes,
+        cc.Matriculados as Matriculados
+    FROM 
+        avaliacao_discente_ere_2020 ad
+        JOIN
+        cursos_e_centros cc
+    WHERE
+
+        /* Aqui entra a definição do ano para puxar os matriculados */
+        cc.ano_referencia = "2020"
+        AND	
+        ad.codigo_curso = cc.codigo_curso
+    GROUP BY 
+        ad.nome_do_curso) centros 
+        JOIN
+        centros_e_diretores cd
+WHERE
+	centros.centro_de_ensino = cd.centro_de_ensino
+GROUP BY 
+	centros.centro_de_ensino
+ORDER BY
+	centros.centro_de_ensino
+
+```
+
+## Respondentes, Matriculados e Porcentagem de toda a instituição
+
+Essa consulta aproveita o SELECT da seção anterior e somente faz um somatório, retorna os seguintes dados:
+
+- Total dos Respondentes
+- Total dos Matriculados
+- Porcentagem entre os Respondentes e Matriculados 
+
+
+````
+SELECT 
+    sum(geral.Respondentes),
+    sum(geral.Matriculados),
+    CAST(sum(Respondentes) as float) / CAST(sum(Matriculados)  as float) * 100 as Porcentagem
+FROM 
+    (SELECT 
+        centros.centro_de_ensino,
+        cd.centro_descricao,
+        sum(centros.Respondentes) Respondentes,
+        sum(centros.Matriculados) Matriculados, 
+        CAST(Respondentes AS FLOAT) / CAST(Matriculados AS FLOAT) * 100 as Porcentagem
+    FROM	
+        (SELECT
+            cc.Centro_de_Ensino as Centro_de_Ensino,
+            ad.Nome_do_Curso as Nome_do_Curso,
+            min(ad.total_do_curso) as Respondentes,
+            cc.Matriculados as Matriculados
+        FROM 
+            avaliacao_discente_ere_2020 ad
+            JOIN
+            cursos_e_centros cc
+        WHERE
+
+            /* Aqui entra a definição do ano para puxar os matriculados */
+            cc.ano_referencia = "2020"
+            AND	
+            ad.codigo_curso = cc.codigo_curso
+        GROUP BY 
+            ad.nome_do_curso) centros 
+            JOIN
+            centros_e_diretores cd
+    WHERE
+        centros.centro_de_ensino = cd.centro_de_ensino
+    GROUP BY 
+        centros.centro_de_ensino
+    ORDER BY
+        centros.centro_de_ensino) geral
+
+
+
+````
