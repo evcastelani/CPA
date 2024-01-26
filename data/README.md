@@ -14,6 +14,12 @@ Assim não é necessário instalar um servidor de banco de dados ou um app para 
 
 Acredito que em breve, vamos ter que trabalhar com outro tipo de código para fazer a combinação entre tabelas. 
 
+# Nova forma de consulta
+
+Outra forma de consulta foi realizada com as novas tabelas passadas pelo NPD. 
+
+Os testes estão descritos na [página sobre os comandos](selecoes.md).
+
 
 ## Importante
 É interessante que os DataFrames tenham o mesmo nome do arquivo CSV, pois assim facilita a consulta usando os comandos abaixo.
