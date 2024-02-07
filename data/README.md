@@ -340,7 +340,7 @@ Essas tabelas podem ser importadas dos CSVs que constam na pasta [csv](<csv/>).
 
 O exemplo abaixo retorna os cursos do Centro de Ensino CCE e traz as informações sobre o ano de referência 2021.
 
-''''
+```` 
 SELECT 
     cc.codigo_curso,
     cc.NOME_do_CURSO,
@@ -378,5 +378,4 @@ ORDER BY
 
 
     
-
-''''
+````
