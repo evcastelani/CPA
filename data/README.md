@@ -328,3 +328,52 @@ FROM
 Resultado esperado:
 
 ![](img/2023-06-28_16-01.png)
+
+
+# Tratamento das tabelas vindas pelo NPD
+
+O NPD tem um processo próprio de exportar as tabelas com os resultados da pesquisa. Para lidar com essa questão e adequar ao software, precisamos aplicar algumas mudanças e filtros. 
+
+No presente exemplo, trabalhamos com duas tabelas: Discente de Graduação e Centros_Cursos.
+
+Essas tabelas podem ser importadas dos CSVs que constam na pasta [csv](<csv/>).
+
+O exemplo abaixo retorna os cursos do Centro de Ensino CCE e traz as informações sobre o ano de referência 2021.
+
+''''
+SELECT 
+    cc.codigo_curso,
+    cc.NOME_do_CURSO,
+    ad.codigo_subgrupo as cd_subgrupo,
+	ad.NOME_SUBGRUPO as nm_subgrupo,
+	ad.CODIGO_PERGUNTA as nu_pergunta,
+	ad.pergunta as pergunta,
+	ad.ORDEM_OPCOES,
+	ad.OPCAO,
+	((SUM(ad.RESPOSTAS) * 1.0) / (SUM(ad.TOTAL_DO_CURSO)* 1.0)) * 100 as Porcentagem,
+	SUM(ad.RESPOSTAS) as Respostas,
+	SUM(ad.TOTAL_DO_CURSO) as Total_do_Curso
+FROM 
+	"2021 Discentes" ad 
+    JOIN
+    centros_cursos cc 
+WHERE
+	ad.codico_curso=cc.Codigo_Curso
+    AND
+    cc.ano_referencia=2021
+    AND 
+    cc.centro_de_ensino="CCE"
+    
+GROUP BY
+    ad.codico_curso,
+    ad.CODIGO_PERGUNTA,
+    ad.Opcao
+ORDER BY 
+    cc.NOME_DO_CURSO,
+    ad.nome_subgrupo,
+    ad.CODIGO_PERGUNTA,
+    ad.ORDEM_OPCOES
+;
+    
+
+''''
