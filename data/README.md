@@ -46,103 +46,28 @@ Os testes estão descritos na [página sobre os comandos](selecoes.md).
 ## Obter a lista de Respondentes por Curso
 Um comando rápido para calcular o total de respondentes. 
 
-```
-SELECT 
-    nome_do_curso, 
-    MIN(total_do_curso) AS Respondentes 
-FROM 
-    avaliacao_discente_ere_2020 
-GROUP BY 
-    nome_do_curso;
-```
+* [SQL: Lista de Respondentes](listaDeRespondentesPorCurso.sql)
 
 ## Obter a lista de centro, cursos e matriculados de 2021
 
 Esse comando permite com que sejam listados todos os alunos matriculados de um determinado ano.
 
-```
-SELECT * 
-FROM 
-    cursos_e_centros 
-WHERE 
-    ano_referencia=2021 
-ORDER BY 
-    centro_de_ensino, nome_do_curso;
-```
+* [SQL: Lista de Centros, Cursos e Matriculados](listaCentrosCursosMatriculados.sql)
 
 ## Concatenar as duas buscas
 Nessa parte eu tento combinar as duas buscas para facilitar o trabalho de consulta às tabelas. 
 
-```
-SELECT ad.codigo_curso, 
-		cc.centro_de_ensino,
-        /* Aqui faço uma combinação meio maluca para
-        listar os nomes dos cursos e os nomes dos centros de forma declarada. 
-        É só um exercício que usei para tentar combinar as tabelas.
-        */
-        (SELECT cd.centro_descricao from centros_e_diretores cd WHERE cd.centro_de_ensino=cc.centro_de_ensino) as Centro_Descricao,
-        cc.nome_do_curso, 
-
-        cc.matriculados,
-        ad.cd_subgrupo,
-        ad.nm_subgrupo,
-        ad.nu_pergunta,
-        ad.pergunta,
-        ad.ordem_opções,
-        ad.opção,
-        ad.porcentagem,
-        ad.respostas,
-        ad.total_do_curso
-        
-/* Aqui faço a combinação de duas tabelas como se fosse uma única tabela.
-    Tabela AD - Avaliação Discente
-    Tabela CC - Cursos e Centros
-*/
-
-FROM 
-    avaliacao_discente_ere_2020 ad JOIN
-    cursos_e_centros cc 
-
-/* Listagem dos matriculados de 2021 */
-where 
-	cc.codigo_curso=ad.codigo_curso AND 
-    cc.ano_referencia = 2021;
-
-```
+* [SQL: Concatenar Busca de Respondentes com Centro, Cursos e Matriculados](concatenarBuscasRespondentesComListaDeCentros.sql)
 
 Resultado esperado:
 
 ![](img/2023-06-28_16-16.png)
 
-## Filtro aplicado ao CCE
+## Aplicar Filtro a Determinado Centro de Ensino
 
 Formatação do filtro por Centro e Por período de 2020.
 
-```
-SELECT 
-	cc.nome_do_curso,
-	ad.cd_subgrupo,
-    ad.nm_subgrupo,
-    ad.nu_pergunta,
-    ad.pergunta,
-    ad.ordem_opções,
-    ad.opção,
-    ad.porcentagem,
-    ad.respostas,
-    ad.total_do_curso
-FROM 
-	avaliacao_discente_ere_2020 ad 
-    JOIN
-    cursos_e_centros cc 
-WHERE
-	ad.codigo_curso=cc.Codigo_Curso
-    AND
-    cc.ano_referencia=2020
-    AND 
-    cc.centro_de_ensino="CCE";
-    
-
-```
+* [SQL: Filtro a Centro de Ensino](aplicarFiltroCentroEnsino.sql)
 
 Resultado esperado:
 
@@ -158,32 +83,7 @@ Nessa tabela, listamos as seguintes variáveis.
 - Número de matriculados
 - Porcentagem entre os respondentes e matriculados
 
-
-```
-SELECT
-    cc.nome_do_curso,
-    cc.centro_de_ensino,
-    ad.total_do_curso as Respondentes,
-    cc.matriculados,
-    CAST(ad.total_do_curso AS FLOAT) / CAST(cc.matriculados AS FLOAT) * 100 as Porcentagem
-FROM
-    /* Junta as duas tabelas */
-	avaliacao_discente_ere_2020 ad join cursos_e_centros cc
-WHERE	
-	ad.codigo_curso=cc.codigo_curso 
-    AND
-    /* Define o período para obter os matriculados */
-    cc.ano_referencia=2020
-    AND
-    /* Informa o centro de Ensino */
-    cc.Centro_de_Ensino="CCE"
-GROUP BY 
-	ad.codigo_curso
-ORDER BY
-	cc.nome_do_curso
-
-
-```
+[SQL: Tabela de Cursos por Centro e Ano de Referência](tabularCursosPorCentroEAno.sql)
 
 Resultado esperado:
 
@@ -200,23 +100,7 @@ Após definir o ano específico, a tabela retornará as seguintes informações:
 - Número de matriculados
 - Porcentagem entre os respondentes e os matriculados
 
-````
-SELECT 
-	cc.nome_do_curso, 
-    cc.centro_de_ensino, 
-    min(ad.total_do_curso) as total_respondentes, 
-    cc.matriculados as total_matriculados,
-    CAST(Min(ad.total_do_curso) AS FLOAT) / CAST(cc.matriculados AS FLOAT) * 100 as Porcentagem
-FROM 
-	avaliacao_discente_ere_2020 ad, 
-    cursos_e_centros cc 
-WHERE
-	ad.codigo_curso = cc.codigo_curso 
-  and
-  	cc.ano_referencia = "2020"
-group by 
-	ad.nome_do_curso
-````
+[SQL: Listar Respondentes, Matriculados por Curso](listarRespondentesMatriculadosPorCurso.sql)
 
 Tabela resultado.
 
@@ -236,41 +120,7 @@ Essa consulta aproveita o SELECT feito na seção anterior. Como resultado terem
 - Total de Matriculados por Centro
 - Porcentagem entre os Respondentes e Matriculados
 
-```
-SELECT 
-	centros.centro_de_ensino,
-    cd.centro_descricao,
-    sum(centros.Respondentes) Respondentes,
-    sum(centros.Matriculados) Matriculados, 
-    CAST(sum(centros.Respondentes) AS FLOAT) / CAST(sum(centros.Matriculados) AS FLOAT) * 100 as Porcentagem
-FROM	
-    (SELECT
-        cc.Centro_de_Ensino as Centro_de_Ensino,
-        ad.Nome_do_Curso as Nome_do_Curso,
-        min(ad.total_do_curso) as Respondentes,
-        cc.Matriculados as Matriculados
-    FROM 
-        avaliacao_discente_ere_2020 ad
-        JOIN
-        cursos_e_centros cc
-    WHERE
-
-        /* Aqui entra a definição do ano para puxar os matriculados */
-        cc.ano_referencia = "2020"
-        AND	
-        ad.codigo_curso = cc.codigo_curso
-    GROUP BY 
-        ad.nome_do_curso) centros 
-        JOIN
-        centros_e_diretores cd
-WHERE
-	centros.centro_de_ensino = cd.centro_de_ensino
-GROUP BY 
-	centros.centro_de_ensino
-ORDER BY
-	centros.centro_de_ensino
-
-```
+[SQL: Matriculados e Respondentes por Centro](listarMatriculadosERespondentesPorCentro.sql)
 
 Resultado da consulta:
 
@@ -284,47 +134,8 @@ Essa consulta aproveita o SELECT da seção anterior e somente faz um somatório
 - Total dos Matriculados
 - Porcentagem entre os Respondentes e Matriculados 
 
+[SQL: Respondentes, Matriculados e Porcentagem da UEM](listarRespondentesMatriculadosPorcentagemdaUEM.sql)
 
-````
-SELECT 
-    sum(geral.Respondentes) Total_Respondentes,
-    sum(geral.Matriculados) Total_Matriculados,
-    CAST(sum(Respondentes) as float) / CAST(sum(Matriculados)  as float) * 100 as Porcentagem
-FROM 
-    (SELECT 
-        centros.centro_de_ensino,
-        cd.centro_descricao,
-        sum(centros.Respondentes) Respondentes,
-        sum(centros.Matriculados) Matriculados, 
-        CAST(Respondentes AS FLOAT) / CAST(Matriculados AS FLOAT) * 100 as Porcentagem
-    FROM	
-        (SELECT
-            cc.Centro_de_Ensino as Centro_de_Ensino,
-            ad.Nome_do_Curso as Nome_do_Curso,
-            min(ad.total_do_curso) as Respondentes,
-            cc.Matriculados as Matriculados
-        FROM 
-            avaliacao_discente_ere_2020 ad
-            JOIN
-            cursos_e_centros cc
-        WHERE
-
-            /* Aqui entra a definição do ano para puxar os matriculados */
-            cc.ano_referencia = "2020"
-            AND	
-            ad.codigo_curso = cc.codigo_curso
-        GROUP BY 
-            ad.nome_do_curso) centros 
-            JOIN
-            centros_e_diretores cd
-    WHERE
-        centros.centro_de_ensino = cd.centro_de_ensino
-    GROUP BY 
-        centros.centro_de_ensino
-    ORDER BY
-        centros.centro_de_ensino) geral
-
-````
 Resultado esperado:
 
 ![](img/2023-06-28_16-01.png)
@@ -340,42 +151,4 @@ Essas tabelas podem ser importadas dos CSVs que constam na pasta [csv](<csv/>).
 
 O exemplo abaixo retorna os cursos do Centro de Ensino CCE e traz as informações sobre o ano de referência 2021.
 
-```` 
-SELECT 
-    cc.codigo_curso,
-    cc.NOME_do_CURSO,
-	cc.Centro_de_Ensino,
-    ad.codigo_subgrupo as cd_subgrupo,
-	ad.NOME_SUBGRUPO as nm_subgrupo,
-	ad.CODIGO_PERGUNTA as nu_pergunta,
-	ad.pergunta as pergunta,
-	ad.ORDEM_OPCOES,
-	ad.OPCAO,
-	((SUM(ad.RESPOSTAS) * 100.0) / (SUM(ad.TOTAL_DO_CURSO) * 1.0))  as Porcentagem,
-	SUM(ad.RESPOSTAS) as Respostas,
-	SUM(ad.TOTAL_DO_CURSO) as Total_do_Curso
-FROM 
-	"2021 Discentes" ad 
-    JOIN
-    centros_cursos cc 
-WHERE
-	ad.codico_curso=cc.Codigo_Curso
-    AND
-    cc.ano_referencia=2021
-    
-GROUP BY
-    ad.codico_curso,
-    ad.CODIGO_PERGUNTA,
-    ad.Opcao
-ORDER BY 
-    cc.NOME_DO_CURSO,
-    ad.nome_subgrupo,
-    ad.CODIGO_PERGUNTA,
-    ad.ORDEM_OPCOES
-;
-
-
-
-
-    
-````
+* [SQL: Tratamento da Tabelas para Rotina em Julia](tratamentoTabelasVindasNPD.sql)
