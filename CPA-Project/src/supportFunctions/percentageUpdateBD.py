@@ -18,7 +18,7 @@ def percentageCalculator(respostas, total):
     
     return opcao_e_porcentagem
 
-def insertPercentageDictIntoDB(collectionName, optPercentage, condition1, condition1Value, condition2, condition2Value):
+def insertPercentageDictIntoDB(collectionName,dictName, optPercentage, condition1, condition1Value, condition2, condition2Value):
     """
     Insere um novo dict(dicionário) que contém a opção/porcentagem em cada documento da respectiva collection 
 
@@ -39,7 +39,7 @@ def insertPercentageDictIntoDB(collectionName, optPercentage, condition1, condit
             condition2: condition2Value
         },
         {
-            '$set': optPercentage
+            '$set': {dictName: optPercentage}
         }
     )
 
@@ -52,7 +52,7 @@ def percentageDictGenerator(collectionName):
     ;return: None
     :rtype: None
     """
-    cursor = collectionName.find({}, {'Codigo_Curso': 1, 'nu_pergunta': 1, 'opcao_e_qtdResposta': 1, 'TotalResp_do_Curso': 24})
+    cursor = collectionName.find({}, {'codigo_curso': 1, 'nu_pergunta': 1, 'opcao_e_qtdResposta': 1, 'TotalResp_do_Curso': 24})
     print('Atualizando dicionário de porcentagem no banco de dados...')
     i = 0
     for value in cursor:

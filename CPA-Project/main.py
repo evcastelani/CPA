@@ -2,8 +2,7 @@ from pymongo import errors
 from database.connectionDB import mongoDBDataBase
 from database.python_mongoDB_dbconfig import read_db_config
 from src.csvManipulationFunctions.CSVManager import *
-from src.supportFunctions.percentageUpdateBD import percentageDictGenerator
-from src.graphGenerator import *
+from src.generationFunctions.mainGenerator import gerarGrafTabRelatorioGPT
 
 #Inicializando conexão com o banco de dados
 db_config = read_db_config()
@@ -13,5 +12,4 @@ database = client.cpa
 curso = database.curso
 
 CSVManagment.InsertCSVtoDatabase(database, curso)   
-percentageDictGenerator(curso)
-controllerGraphGenerator(curso)
+gerarGrafTabRelatorioGPT(curso)

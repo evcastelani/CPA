@@ -20,7 +20,7 @@ def percentage_plot(pct, allvalues):
     absolute = int(pct / 100.*np.sum(allvalues))
     return "{:.2f}%".format(pct, absolute) if pct > 0 else ''
 
-def graphPlot(dirSaidaFig,cod_curso, cod_subgrupo, options,percentage, num_pergunta, pergunta ):
+def graphPlot(dirSaidaFig,cod_curso, cod_subgrupo, options,percentage, num_pergunta, pergunta):
     """
     Função que cria a figura do gráfico
 
@@ -56,9 +56,8 @@ def graphPlot(dirSaidaFig,cod_curso, cod_subgrupo, options,percentage, num_pergu
                                     startangle=90,
                                     wedgeprops=wp,
                                     textprops=dict(color="white"))
-    
-    ax.legend(wedges, 
-            options,
+
+    ax.legend(
             title="Opções",
             loc="center left",
             bbox_to_anchor=(1, 0, 0.5, 1),
@@ -74,7 +73,7 @@ def graphPlot(dirSaidaFig,cod_curso, cod_subgrupo, options,percentage, num_pergu
     return path
 
 
-def controllerGraphGenerator(collectionName):
+def controllerGraphGenerator(collectionName, opcoes, porcentagem, cod_curso, cd_subgrupo, nu_pergunta, pergunta):
     """
     Função que realiza a chamada da função que gera os gráficos para cada documento que estiver no banco de dados.
 
@@ -91,19 +90,6 @@ def controllerGraphGenerator(collectionName):
     if not os.path.exists(diretorio_saida_figura):
         os.makedirs(diretorio_saida_figura)
 
-    temp = 0
-    for value in collectionName.find():
-
-        opcoes, porcentagem = dictToList(value['opcao_e_porcentagem'])
-        finalPath = graphPlot(diretorio_saida_figura, value['Codigo_Curso'], value['cd_subgrupo'], opcoes, porcentagem, value['nu_pergunta'], value['pergunta'])
-
-        collectionName.update_one(
-            {
-                'Codigo_Curso': value['Codigo_Curso'],
-                'nu_pergunta': value['nu_pergunta']
-            },
-            {
-                '$set': {'Caminho_para_figura': finalPath}
-            }
-        )
-        temp += 1
+    finalPath = graphPlot(diretorio_saida_figura, cod_curso, cd_subgrupo, opcoes, porcentagem, nu_pergunta, pergunta)
+    
+    return finalPath

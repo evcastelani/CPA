@@ -47,7 +47,7 @@ for document in collection.find().limit(5):
     pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
     temp_dict = document["opcao_e_porcentagem"]
     sorted_dict = dict(sorted(document["opcao_e_porcentagem"].items(), key=lambda x: x[1], reverse=True))
-    temp_message = tableInterpretationTextGenerator(pergunta_formatada,sorted_dict)
+    temp_message = tableInterpretationTextGenerator(pergunta_formatada, sorted_dict)
     print(temp_message)
     completion = clientAI.chat.completions.create(
         model="gpt-3.5-turbo",

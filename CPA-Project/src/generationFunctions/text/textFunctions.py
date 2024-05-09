@@ -48,13 +48,3 @@ def composeTable(pergunta, optAndPercentage):
 
     return s
 
-opcao_e_porcentagem = {
-        'Ótimo': 70.83,
-        'Bom': 20.83,
-        'Regular': 4.17,
-        'Ruim': 4.17,
-        'Péssimo': 0
-    }
-
-temp = tableInterpretationTextGenerator('1.2- Sua frequência nas disciplinas remotas', opcao_e_porcentagem)
-print(temp)
