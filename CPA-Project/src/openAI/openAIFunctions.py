@@ -8,6 +8,14 @@ key = getKey()
 clientAI = OpenAI(api_key=key)
 
 def createCaption(pergunta):
+    """
+    Função que gera o título com base na pergunta, que é gerada utilizando a IA
+
+    :Param pegunta: Pergunta que será transformada em titulo pelo chatGPT
+    :type pergunta: String
+    :return: título gerado pelo chatGPT
+    :rtype: String
+    """
     try:
         completion = clientAI.chat.completions.create(
             model="gpt-4-turbo",
@@ -47,8 +55,18 @@ def createCaption(pergunta):
         print(f"OpenAI API request exceeded rate limit: {e}")
         pass
 
-def createReport(pergunta, dictOptPct, index):
-    inicio_textual = rand.choice([f"Considerando a Tabela {index}, ", f"De acordo com a Tabela {index}, ", f"Pela Tabela {index}", f"Constatou-se pela Tabela {index} que ", f"Percebe-se pela Tabela {index} que "])
+def createReport(pergunta, dictOptPct):
+    """
+    Função que gera o relatório para a pergunta que está sendo analisada, com base nas opções e porcentagens
+
+    :param pergunta: Pergunta na qual está sendo feito o relatório
+    :type pergunta: String
+    :param dictOPtPct: Dicionário contendo as opções e respostas da pergunta
+    :type dictOptPct: Dict
+    :return: Retorna o relatório feito pelo chatGPT como resposta
+    :rtype: String
+    """
+    inicio_textual = rand.choice([f"Considerando a Tabela index_, ", f"De acordo com a Tabela index_, ", f"Pela Tabela index_", f"Constatou-se pela Tabela index_ que ", f"Percebe-se pela Tabela index_ que "])
     temp_message = tableInterpretationTextGenerator(pergunta, dictOptPct)
 
     try:

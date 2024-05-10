@@ -5,6 +5,22 @@ from src.supportFunctions.percentageUpdateBD import *
 
 class CSVManagment:
 
+    def verifyDataExistBD(verifier, collectionName):
+        """
+        Função que verifica se os dados do CSV já foram inseridos no banco de dados
+
+        :param verifier: Um valor a ser verificado no banco para ver se os dados já foram inseridos
+        :type verifier: String or Int
+        :param collectionName: Collection que estamos utilizando
+        :type collectionName: Collection
+        :return: Boolean que mostra se os dados estão no banco ou não
+        :rtype: Boolean
+        """
+        for document in collectionName.find().limit(1):
+            if document["codigo_curso"] == verifier:
+                return True
+            return False
+
     def CSVReader():
         """
         Função que retorna o nome do arquivo CSV que será usado.
@@ -43,6 +59,9 @@ class CSVManagment:
         #Filtragem do dataframe
         print(df)
 
+        if CSVManagment.verifyDataExistBD(df.iloc[0,0], collectionName) == True:
+            return print("Os dados já foram inseridos no banco!")
+
         # Neste for estamos iterando o dataframe e coletando as informações para serem inseridas no banco de dados
         for i in range(len(df)):
             print(f"Inserindo infos no banco: %{round(100*i/len(df), 0)}")
@@ -76,6 +95,6 @@ class CSVManagment:
 
                 temp_pctdict.update({str(df.iloc[i,8]): int(df.iloc[i,10])})
 
-        print("Inserção dos dados no banco de dados finalizada corretamente ✅")
+        return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
             
             

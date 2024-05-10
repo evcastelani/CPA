@@ -2,7 +2,7 @@ from pymongo import errors
 from database.connectionDB import mongoDBDataBase
 from database.python_mongoDB_dbconfig import read_db_config
 from src.csvManipulationFunctions.CSVManager import *
-from src.generationFunctions.mainGenerator import gerarGrafTabRelatorioGPT
+from src.generationFunctions.mainGenerator import gerarGrafTabRelatorioGPT, teste
 
 #Inicializando conexão com o banco de dados
 db_config = read_db_config()

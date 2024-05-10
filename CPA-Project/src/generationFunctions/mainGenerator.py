@@ -4,6 +4,12 @@ from src.generationFunctions.text.textFunctions import composeTable
 from src.openAI.openAIFunctions import *
 
 def gerarGrafTabRelatorioGPT(collectionName):
+    """
+    Função controller que chama as outras funções para gerar o gráfico, a tabela e as legendas e reports para o relatório
+
+    :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
+    :type CollectionName: Collection
+    """
     index = 1
     for document in collectionName.find().limit(4):
         pergunta_formatada = pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
@@ -30,3 +36,13 @@ def gerarGrafTabRelatorioGPT(collectionName):
         )
         index += 1
 
+
+
+def gerarTodosRelatorios():
+    ...
+
+def gerarRelatorioCurso():
+    ...
+
+def gerarRelatorioPorCentro():
+    ...
