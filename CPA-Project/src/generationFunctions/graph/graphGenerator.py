@@ -89,7 +89,7 @@ def controllerGraphGenerator(collectionName, opcoes, porcentagem, cod_curso, cd_
 
     if not os.path.exists(diretorio_saida_figura):
         os.makedirs(diretorio_saida_figura)
-
+    
     finalPath = graphPlot(diretorio_saida_figura, cod_curso, cd_subgrupo, opcoes, porcentagem, nu_pergunta, pergunta)
     
     return finalPath

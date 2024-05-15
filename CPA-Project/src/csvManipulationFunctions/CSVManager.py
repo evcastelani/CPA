@@ -41,7 +41,7 @@ class CSVManagment:
         path = Path(__file__).parent.resolve()
         return path
 
-    def InsertCSVtoDatabase(database,collectionName):
+    def insertMainCSVtoDatabase(database,collectionName):
         """
         Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)
         
@@ -55,7 +55,8 @@ class CSVManagment:
         df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=';', header = 0)
 
         cabecalho = list(map(lambda x: x.lower(), list(df.columns)))
-        print(cabecalho)
+        # cabecalho = tuple('codigo_curso', 'nome_do_curso', 'centro_de_ensino', 'codigo_grupo', 'nome_grupo', 'codigo_subgrupo', 'nome_subgrupo', 'num_pergunta', 'pergunta', 'ordem_opcoes', 'opcao', 'porcentagem', 'respostas', 'total_do_curso')
+        # print(cabecalho)
         #Filtragem do dataframe
         print(df)
 
@@ -75,15 +76,17 @@ class CSVManagment:
                     #Inserindo informações iniciais em cada BSON.
                     collectionName.insert_one(
                             {
-                            cabecalho[0]: int(df.iloc[i,0]),
-                            cabecalho[1]:f'{df.iloc[i,1]}',
-                            cabecalho[2]: f'{df.iloc[i,2]}',
-                            cabecalho[3]: int(df.iloc[i,3]),
-                            cabecalho[4]: f'{df.iloc[i,4]}',
-                            cabecalho[5]: int(df.iloc[i,5]),
-                            cabecalho[6]: f"{df.iloc[i,6]}", 
-                            cabecalho[7]: int(df.iloc[i,7]),
-                            cabecalho[11]: int(df.iloc[i,11])
+                            cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
+                            cabecalho[1]:f'{df.iloc[i,1]}',     #nome_do_curso
+                            cabecalho[2]: f'{df.iloc[i,2]}',    #centro_de_ensino
+                            #cabecalho[3]: codigo_grupo
+                            #cabecalho[4]: nome_grupo
+                            cabecalho[3]: int(df.iloc[i,3]),    #codigo_subgrupo
+                            cabecalho[4]: f'{df.iloc[i,4]}',    #nome_subgrupo
+                            cabecalho[5]: int(df.iloc[i,5]),    #num_pergunta 
+                            cabecalho[6]: f"{df.iloc[i,6]}",    #pergunta
+                            cabecalho[7]: int(df.iloc[i,7]),    #ordem_opcao
+                            cabecalho[11]: int(df.iloc[i,11])   #total_do_curso
                             } 
                         )
                     temp_pctdict.update({str(df.iloc[i,8]): int(df.iloc[i,10])})
@@ -97,4 +100,6 @@ class CSVManagment:
 
         return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
             
-            
+    def insertCentroCSVtoDatabase(database, collectionName):
+        ...
+    
