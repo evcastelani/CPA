@@ -16,7 +16,7 @@ def tableInterpretationTextGenerator(pergunta, optAndPercentage):
     return text
 
 key = getKey()
-clientAI = OpenAI(api_key=key) 
+clientAI = OpenAI(api_key=key)
 
 # print(completion.choices[0].message)
 

@@ -81,6 +81,8 @@ class CSVManagment:
                             cabecalho[2]: f'{df.iloc[i,2]}',    #centro_de_ensino
                             #cabecalho[3]: codigo_grupo
                             #cabecalho[4]: nome_grupo
+                            #cabecalho[5]: codigo_disciplina
+                            #cabecalho[6]: nome_disciplina
                             cabecalho[3]: int(df.iloc[i,3]),    #codigo_subgrupo
                             cabecalho[4]: f'{df.iloc[i,4]}',    #nome_subgrupo
                             cabecalho[5]: int(df.iloc[i,5]),    #num_pergunta 

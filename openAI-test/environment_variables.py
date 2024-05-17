@@ -8,3 +8,4 @@ load_dotenv(dotenv_path)
 def getKey():
     API_KEY = os.getenv("OPENAI_API_KEY")
     return API_KEY
+

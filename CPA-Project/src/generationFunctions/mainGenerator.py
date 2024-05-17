@@ -62,6 +62,7 @@ def gerarRelatorioCurso(curso_escolhido, collectionName):
         print(document['relatorioGraficoGPT'])
         print(f"Edição da pergunta {document['nu_pergunta']} do subgrupo {document['cd_subgrupo']} do curso {document['nome_do_curso']} concluida com sucesso!")
     
+    
     #Apenas falta a parte da conclusão
         
         

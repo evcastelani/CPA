@@ -12,6 +12,6 @@ database = client.cpa
 
 curso = database.curso
 
-# CSVManagment.insertMainCSVtoDatabase(database, curso)   
+CSVManagment.insertMainCSVtoDatabase(database, curso)   
 # gerarGrafTabRelatorioGPT(curso)
-gerarRelatoriosPorCentro(curso)
+# gerarRelatoriosPorCentro(curso)
