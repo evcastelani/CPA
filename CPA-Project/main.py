@@ -11,7 +11,11 @@ print("Connection Established with MongoDB")
 database = client.cpa
 
 curso = database.curso
+centro_e_curso = database['centro_e_curso']
+diretor_e_centro = database['diretor_e_centro']
 
-CSVManagment.insertMainCSVtoDatabase(database, curso)   
-# gerarGrafTabRelatorioGPT(curso)
+# CSVManagment.insertMainCSVtoDatabase(database, curso)
+# CSVManagment.insertCursoeCentroCSVtoDatabase(database, centro_e_curso) 
+# CSVManagment.insertCentroDiretorCSVDatabase(database, diretor_e_centro)  
+gerarGrafTabRelatorioGPT(curso)
 # gerarRelatoriosPorCentro(curso)

@@ -4,3 +4,6 @@ def compor_introducdao(collectionName, arquivo_intro):
 
 def compor_conclusão(collectionName, arquivo_intro):
     ...
+
+def compor_conteudoRelatório(colletionName, arquivo_intro):
+    ...

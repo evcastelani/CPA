@@ -12,13 +12,13 @@ def gerarGrafTabRelatorioGPT(collectionName):
     :type CollectionName: Collection
     """
     for document in collectionName.find({'relatorioGraficoGPT': {'$exists': False}}):
-        pergunta_formatada = pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
+        pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
         sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
         opcoes, pct = dictToList(sorted_pctOptDict)
         path = controllerGraphGenerator(collectionName, opcoes, pct, document["codigo_curso"], document["cd_subgrupo"], document["nu_pergunta"], pergunta_formatada)
-        table = composeTable(pergunta_formatada, sorted_pctOptDict)
-        reportGraph = createReport(pergunta_formatada, sorted_pctOptDict)
-        captionGraph = createCaption(pergunta_formatada)
+        # table = composeTable(pergunta_formatada, sorted_pctOptDict)
+        # reportGraph = createReport(pergunta_formatada, sorted_pctOptDict)
+        # captionGraph = createCaption(pergunta_formatada)
 
         collectionName.update_one(
             {
@@ -28,15 +28,16 @@ def gerarGrafTabRelatorioGPT(collectionName):
             {
                 '$set': {
                     'path': path,
-                    'tabela': table,
-                    'relatorioGraficoGPT': reportGraph,
-                    'legendaGraficoGPT': captionGraph  
+                    # 'tabela': table,
+                    # 'relatorioGraficoGPT': reportGraph,
+                    # 'legendaGraficoGPT': captionGraph  
                 }
             }
         )
 
 
-def gerarRelatorioCurso(curso_escolhido, collectionName):
+def gerarRelatorioPorCurso(curso_escolhido, collectionName):
+    #Talvez separar parte inicial para virar uma função compor capa
     arquivo = open(f'{curso_escolhido}.md', 'w')
     print('---', file=arquivo)
     print(f'title: \'Relatório do Curso de {curso_escolhido}\'', file=arquivo)
@@ -52,7 +53,10 @@ def gerarRelatorioCurso(curso_escolhido, collectionName):
 
     #Precisa criar a função que compõe a introdução
 
+    #-------------------------------- VIRA UMA FUNÇÃO ----------------------------
     for document in collectionName.find({'nome_do_curso': curso_escolhido}):
+        # if document['codigo_disciplina'] == '-':
+
         arquivo.write(f"![{document['legendaGraficoGPT']}](Imagens/{document['path']}) \n")
         print(' ', file=arquivo)
         print(f"Tabela index_- {document['legendaGraficoGPT']} \n", file=arquivo)
@@ -62,7 +66,11 @@ def gerarRelatorioCurso(curso_escolhido, collectionName):
         print(document['relatorioGraficoGPT'])
         print(f"Edição da pergunta {document['nu_pergunta']} do subgrupo {document['cd_subgrupo']} do curso {document['nome_do_curso']} concluida com sucesso!")
     
-    
+    for document in collectionName.find({'nome_do_curso': curso_escolhido}):
+        # if document['codigo_disciplina'] != '-':
+        ...
+    #------------------------------------VIRA UMA FUNÇÃO ----------------------------
+
     #Apenas falta a parte da conclusão
         
         

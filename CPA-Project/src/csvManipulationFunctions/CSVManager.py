@@ -5,7 +5,7 @@ from src.supportFunctions.percentageUpdateBD import *
 
 class CSVManagment:
 
-    def verifyDataExistBD(verifier, collectionName):
+    def maincsv_verifier(verifier, collectionName):
         """
         Função que verifica se os dados do CSV já foram inseridos no banco de dados
 
@@ -60,7 +60,7 @@ class CSVManagment:
         #Filtragem do dataframe
         print(df)
 
-        if CSVManagment.verifyDataExistBD(df.iloc[0,0], collectionName) == True:
+        if CSVManagment.maincsv_verifier(df.iloc[0,0], collectionName) == True:
             return print("Os dados já foram inseridos no banco!")
 
         # Neste for estamos iterando o dataframe e coletando as informações para serem inseridas no banco de dados
@@ -101,7 +101,55 @@ class CSVManagment:
                 temp_pctdict.update({str(df.iloc[i,8]): int(df.iloc[i,10])})
 
         return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
-            
-    def insertCentroCSVtoDatabase(database, collectionName):
-        ...
+
+
+    def insertCursoeCentroCSVtoDatabase(database, collectionName):
+
+        # csvArchive = CSVManagment.CSVReader()
+        csvArchive = 'cursos_e_centros.csv'
+        dirArquivo = CSVManagment.findPath()
+        df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=',', header = 0)
+
+        print(df)
+
+        cabecalho = list(map(lambda x: x.lower(), list(df.columns)))
+
+        print(cabecalho[0])
+
+        for i in range(len(df)):
+            print(f"Inserindo infos no banco: %{round(100*i/len(df), 0)}")
+            collectionName.insert_one(
+                {
+                    cabecalho[0]: int(df.iloc[i,0]),
+                    cabecalho[1]: float(df.iloc[i,1]),
+                    cabecalho[2]: str(df.iloc[i,2]),
+                    cabecalho[3]: str(df.iloc[i,3]),
+                    cabecalho[4]: int(df.iloc[i,4]),
+                    cabecalho[5]: int(df.iloc[i,5])
+                }
+            )
+        return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
+
+
+
+    def insertCentroDiretorCSVDatabase(database, collectionName):
+        # csvArchive = CSVManagment.CSVReader()
+        csvArchive = 'centros_e_diretores.csv'
+        dirArquivo = CSVManagment.findPath()
+        df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=',', header = 0)
+
+        cabecalho = list(map(lambda x: x.lower(), list(df.columns)))
+        
+        for i in range(len(df)):
+            collectionName.insert_one(
+                {
+                    cabecalho[0]: str(df.iloc[i,0]),
+                    cabecalho[1]: str(df.iloc[i,1]),
+                    cabecalho[2]: str(df.iloc[i,2]),
+                    cabecalho[3]: str(df.iloc[i,3]),
+                    cabecalho[4]: str(df.iloc[i,4]),
+                }
+            )
+        return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
+
     
