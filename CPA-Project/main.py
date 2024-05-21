@@ -12,18 +12,18 @@ print("Connection Established with MongoDB")
 database = client.cpa
 
 curso = database.curso
+cursoAtualizado = database['cursoAtualizado2024']
 centro_e_curso = database['centro_e_curso']
 diretor_e_centro = database['diretor_e_centro']
 
 '''
 OBS: DEPOIS CRIAR UM CONTROLLER DE ESCOPO MAIOR PARA CONSEGUIR COBRIR MELHOR AS FUNCOES PARA QUE NAO FIQUE ISSO TUDO,
 MAS ESPERAR ACABAR TODA A GERAÇÃO DE RELATÓRIO
-
 '''
 
-# CSVManagment.insertMainCSVtoDatabase(database, curso)
+# CSVManagment.insertMainCSVtoDatabase(database, cursoAtualizado)
 # CSVManagment.insertCursoeCentroCSVtoDatabase(database, centro_e_curso) 
 # CSVManagment.insertCentroDiretorCSVDatabase(database, diretor_e_centro)  
 # gerarGrafTabRelatorioGPT(curso)
-df_centro_por_curso(database)
+# df_centro_por_curso(database)
 # gerarRelatoriosPorCentro(curso)

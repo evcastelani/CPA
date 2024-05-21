@@ -52,10 +52,10 @@ class CSVManagment:
         """
         csvArchive = CSVManagment.CSVReader()
         dirArquivo = CSVManagment.findPath()
-        df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=';', header = 0)
+        df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=',', header = 0)
 
         #O cabeçalho terá um formato padrão para evitar erros e problemas futuros, apenas sendo necessário manter a ordem de cada coluna
-        cabecalho = tuple(
+        cabecalho = (
             'cd_curso', 
             'nm_curso', 
             'centro_de_ensino', 
@@ -66,7 +66,7 @@ class CSVManagment:
             'cd_disciplina',
             'nm_disciplina',
             'cd_pergunta',
-            'nm_pergunta'
+            'nm_pergunta',
             'ordem_opcoes',
             'opcao',
             'respostas',
