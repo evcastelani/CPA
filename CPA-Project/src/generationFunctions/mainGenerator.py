@@ -11,24 +11,23 @@ def gerarGrafTabRelatorioGPT(collectionName):
     :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
     :type CollectionName: Collection
     """
-
     for document in collectionName.find({'relatorioGraficoGPT': {'$exists': False}}):
-        pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
+        pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["nm_pergunta"])
         sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
         opcoes, pct = dictToList(sorted_pctOptDict)
-        path = controllerGraphGenerator(collectionName, opcoes, pct, document["codigo_curso"], document["cd_subgrupo"], document["nu_pergunta"], pergunta_formatada)
+        path = controllerGraphGenerator(collectionName, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
         # table = composeTable(pergunta_formatada, sorted_pctOptDict)
         # reportGraph = createReport(pergunta_formatada, sorted_pctOptDict)
         # captionGraph = createCaption(pergunta_formatada)
 
         collectionName.update_one(
             {
-                "codigo_curso": document["codigo_curso"],
-                "nu_pergunta": document["nu_pergunta"]
+                "cd_curso": document["cd_curso"],
+                "cd_pergunta": document["cd_pergunta"]
             },
             {
                 '$set': {
-                    'path': path
+                    'path': path,
                     # 'tabela': table,
                     # 'relatorioGraficoGPT': reportGraph,
                     # 'legendaGraficoGPT': captionGraph  
@@ -67,7 +66,7 @@ def gerarRelatorioPorCurso(curso_escolhido, collectionName):
         print(document['relatorioGraficoGPT'])
         print(f"Edição da pergunta {document['nu_pergunta']} do subgrupo {document['cd_subgrupo']} do curso {document['nome_do_curso']} concluida com sucesso!")
     
-    for document in collectionName.find({'nome_do_curso': curso_escolhido}):
+    for document in collectionName.find({'nm_curso': curso_escolhido}):
         # if document['codigo_disciplina'] != '-':
         ...
     #------------------------------------VIRA UMA FUNÇÃO ----------------------------
@@ -76,7 +75,7 @@ def gerarRelatorioPorCurso(curso_escolhido, collectionName):
         
         
 def gerarTodosRelatorios(collectionName):
-    cursos = collectionName.distinct("nome_do_curso")
+    cursos = collectionName.distinct("nm_curso")
     for nome_curso in cursos:
         #Aqui entra a função de gerarRelatorioCurso
         print(nome_curso)
@@ -84,7 +83,7 @@ def gerarTodosRelatorios(collectionName):
 
 def gerarRelatoriosPorCentro(collectionName):
     centro_de_ensino = str(input("Digite o centro de ensino que deseja escolher para gerar os relatórios: "))
-    result = collectionName.distinct('nome_do_curso', {'centro_de_ensino': centro_de_ensino})
+    result = collectionName.distinct('nm_curso', {'centro_de_ensino': centro_de_ensino})
     for nome_cursos in result:
         ...
         #Aqui entra função gerarRelatorioCurso
