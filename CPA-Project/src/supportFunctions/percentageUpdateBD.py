@@ -44,6 +44,8 @@ def insertPercentageDictIntoDB(collectionName,dictName, optPercentage, condition
     )
 
 def percentageDictGenerator(collectionName):
+    #Sem uso atualmente
+    
     """
     Função que para documento gera um novo dict com a função percentageCalulcator e insere com a insertPercentageDictIntoDB
 
@@ -52,7 +54,7 @@ def percentageDictGenerator(collectionName):
     ;return: None
     :rtype: None
     """
-    cursor = collectionName.find({}, {'codigo_curso': 1, 'nu_pergunta': 1, 'opcao_e_qtdResposta': 1, 'TotalResp_do_Curso': 24})
+    cursor = collectionName.find({}, {'cd_curso': 1, 'cd_pergunta': 1, 'opcao_e_qtdResposta': 1, 'TotalResp_do_Curso': 24})
     print('Atualizando dicionário de porcentagem no banco de dados...')
     i = 0
     for value in cursor:

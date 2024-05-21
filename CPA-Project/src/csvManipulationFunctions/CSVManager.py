@@ -95,15 +95,15 @@ class CSVManagment:
                             cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
                             cabecalho[1]:f'{df.iloc[i,1]}',     #nome_do_curso
                             cabecalho[2]: f'{df.iloc[i,2]}',    #centro_de_ensino
-                            cabecalho[3]: int(df.iloc[i,3]),   #codigo_grupo
+                            cabecalho[3]: int(df.iloc[i,3]),    #codigo_grupo
                             cabecalho[4]: str(df.iloc[i,4]),    #nome_grupo
                             cabecalho[5]: int(df.iloc[i,5]),    #codigo_subgrupo
                             cabecalho[6]: f'{df.iloc[i,6]}',    #nome_subgrupo
                             cabecalho[7]: int(df.iloc[i,7]),    #codigo_disciplina
                             cabecalho[8]: str(df.iloc[i,8]),    #nome_disciplina
                             cabecalho[9]: int(df.iloc[i,9]),    #codigo_pergunta 
-                            cabecalho[10]: f"{df.iloc[i,10]}",    #nome_pergunta
-                            cabecalho[11]: int(df.iloc[i,7]),    #ordem_opcao
+                            cabecalho[10]: f"{df.iloc[i,10]}",  #nome_pergunta
+                            cabecalho[11]: int(df.iloc[i,7]),   #ordem_opcao
                             cabecalho[14]: int(df.iloc[i,14])   #total_do_curso
                             } 
                         )
