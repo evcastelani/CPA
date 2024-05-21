@@ -110,11 +110,7 @@ class CSVManagment:
         dirArquivo = CSVManagment.findPath()
         df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=',', header = 0)
 
-        print(df)
-
         cabecalho = list(map(lambda x: x.lower(), list(df.columns)))
-
-        print(cabecalho[0])
 
         for i in range(len(df)):
             print(f"Inserindo infos no banco: %{round(100*i/len(df), 0)}")

@@ -11,6 +11,7 @@ def gerarGrafTabRelatorioGPT(collectionName):
     :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
     :type CollectionName: Collection
     """
+
     for document in collectionName.find({'relatorioGraficoGPT': {'$exists': False}}):
         pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
         sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
@@ -27,7 +28,7 @@ def gerarGrafTabRelatorioGPT(collectionName):
             },
             {
                 '$set': {
-                    'path': path,
+                    'path': path
                     # 'tabela': table,
                     # 'relatorioGraficoGPT': reportGraph,
                     # 'legendaGraficoGPT': captionGraph  
