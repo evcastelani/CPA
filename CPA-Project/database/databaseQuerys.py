@@ -157,12 +157,12 @@ def df_centro_por_ano(database, ano):
             "$group": {
                 "_id": "$nome_do_curso",
                 "centro_de_ensino": {"$first": "$cursos_e_centros.centro_de_ensino"},
-                "respondentes": {"$max": "$total_do_curso"},
-                "matriculados": {'$first': "$cursos_e_centros.matriculados"},
+                "respondentes": {'$sum':{"$max": "$total_do_curso"}},
+                "matriculados": {'$sum': "$cursos_e_centros.matriculados"},
                 "porcentagem": {
                     "$avg": {
                         "$multiply": [
-                            {"$divide": [{"$sum": "$total_do_curso"}, {"$sum": "$cursos_e_centros.matriculados"}]},
+                            {"$divide": [{"$sum": "$total_do_curso"}, {"$sum": "$matriculados"}]},
                             100
                         ]
                     }
@@ -173,8 +173,8 @@ def df_centro_por_ano(database, ano):
             '$project': {
                 '_id': 0,
                 'centro_de_ensino':1,
-                'respondentes': {'$sum':'$respondentes'},
-                'matriculados': {'$sum': '$matriculados'},
+                'respondentes': 1,
+                'matriculados': 1,
                 'porcentagem': {'$round': ['$porcentagem',2]}
             }
         },
