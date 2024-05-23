@@ -5,7 +5,7 @@ from src.openAI.openAIFunctions import *
 import os
 
 def gerarGrafTabRelatorioGPT(collectionName):
-    """
+    """ 
     Função controller que chama as outras funções para gerar o gráfico, a tabela e as legendas e reports para o relatório
 
     :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
