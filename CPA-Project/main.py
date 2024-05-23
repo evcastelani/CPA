@@ -11,6 +11,7 @@ client = mongoDBDataBase.connection(db_config)
 print("Connection Established with MongoDB")
 database = client.cpa
 
+#Criando as collections que serão usadas
 curso = database.curso
 cursoAtualizado = database['cursoAtualizado2024']
 centro_e_curso = database['centro_e_curso']
