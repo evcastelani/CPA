@@ -1,4 +1,4 @@
-def df_centro_por_curso(database):
+def df_centro_por_curso(database,ano,centro_de_ensino):
     cursos_e_centros = database['centro_e_curso']
     curso = database['curso']
 
@@ -17,8 +17,8 @@ def df_centro_por_curso(database):
         },
         {
             "$match": {
-                "ano_referencia": 2020,
-                "centro_de_ensino": "CSA",
+                "ano_referencia": ano,
+                "centro_de_ensino": centro_de_ensino,
                 "curso.codigo_curso": {"$exists": True}
             }
         },
@@ -62,79 +62,7 @@ def df_centro_por_curso(database):
 
 def df_centro_por_ano(database, ano):
     curso = database['curso']
-    cursos_e_centros = database['cursos_e_centros']
-    centros_e_diretores = database['centros_e_diretores']
-
-#     curso.aggregate([
-#     {
-#         "$lookup": {
-#             "from": "cursos_e_centros",
-#             "localField": "codigo_curso",
-#             "foreignField": "codigo_curso",
-#             "as": "cursos_e_centros"
-#         }
-#     },
-#     {
-#         "$unwind": "$cursos_e_centros"
-#     },
-#     {
-#         "$match": {
-#             "cursos_e_centros.ano_referencia": 2021 
-#         }
-#     },
-#     {
-#         "$group": {
-#             "_id": "$nome_do_curso",
-#             "centro_de_ensino": {"$first": "$cursos_e_centros.centro_de_ensino"},
-#             "respondentes": {"$max": "$total_do_curso"},
-#             "matriculados": {'$first': "$cursos_e_centros.matriculados"}
-#         }
-#     },
-#     {
-#         "$lookup": {
-#             "from": "centros_e_diretores",
-#             "localField": "centro_de_ensino",
-#             "foreignField": "centro_de_ensino",
-#             "as": "centros_e_diretores"
-#         }
-#     },
-#     {
-#         "$unwind": "$centros_e_diretores"
-#     },
-#     {
-#         "$group": {
-#             "_id": "$centro_de_ensino",
-#             "centro_descricao": {"$first": "$centros_e_diretores.centro_descricao"},
-#             "respondentes": {"$sum": "$respondentes"},
-#             "matriculados": {"$sum": "$matriculados"},
-#             "porcentagem": {
-#                 "$avg": {
-#                     "$multiply": [
-#                         {"$divide": [{"$sum": "$respondentes"}, {"$sum": "$matriculados"}]},
-#                         100
-#                     ]
-#                 }
-#             }
-#         }
-#     },
-#     {
-#         '$project': {
-#             '_id': 0,
-#             'centro_de_ensino':'$_id',
-#             'centro_descricao':1,
-#             'respondentes': 1,
-#             'matriculados':1,
-#             'porcentagem': {'$round': ['$porcentagem', 2]}
-#         }
-
-#     },
-#     {
-#         "$sort": {"_id": 1}
-#     },
-#     {
-#         '$out': 'centro_por_ano'
-#     }
-# ])
+    centro_por_ano_temp = database['centro_por_ano_temp']
 
     curso.aggregate([
         {   
@@ -150,35 +78,82 @@ def df_centro_por_ano(database, ano):
         },
         {
             "$match": {
-                "cursos_e_centros.ano_referencia": 2021 
+                "cursos_e_centros.ano_referencia": ano 
             }
         },
         {
             "$group": {
                 "_id": "$nome_do_curso",
-                "centro_de_ensino": {"$first": "$cursos_e_centros.centro_de_ensino"},
-                "respondentes": {'$sum':{"$max": "$total_do_curso"}},
-                "matriculados": {'$sum': "$cursos_e_centros.matriculados"},
-                "porcentagem": {
-                    "$avg": {
-                        "$multiply": [
-                            {"$divide": [{"$sum": "$total_do_curso"}, {"$sum": "$matriculados"}]},
-                            100
-                        ]
-                    }
-                }
+                "respondentes": {"$max": "$total_do_curso"},
+                "centro_de_ensino": {'$first': '$cursos_e_centros.centro_de_ensino'},
+                "matriculados": {'$first': "$cursos_e_centros.matriculados"},
+            }
+        },
+        {
+            '$addFields': {
+                'centro_de_ensino': '$centro_de_ensino'
             }
         },
         {
             '$project': {
-                '_id': 0,
-                'centro_de_ensino':1,
+                '_id': 1,
+                'centro_de_ensino': 1,
                 'respondentes': 1,
                 'matriculados': 1,
-                'porcentagem': {'$round': ['$porcentagem',2]}
             }
         },
         {
-            '$out':'centro_por_ano'
+            '$out':'centro_por_ano_temp'
         }
     ])
+    
+    centro_por_ano_temp.aggregate(
+        [
+            {
+                '$lookup':{
+                    "from": "centros_e_diretores",
+                    "localField": "centro_de_ensino",
+                    "foreignField": "centro_de_ensino",
+                    "as": "centros_e_diretores"
+                }
+            },
+            {
+                "$unwind": "$centros_e_diretores"
+            },
+            {
+                "$group": {
+                    "_id": "$centro_de_ensino",
+                    "centro_descricao": {"$first": "$centros_e_diretores.centro_descricao"},
+                    "respondentes": {"$sum": "$respondentes"},
+                    "matriculados": {"$sum": "$matriculados"},
+                    "porcentagem": {
+                        "$avg": {
+                            "$multiply": [
+                                {"$divide": [{"$sum": "$respondentes"}, {"$sum": "$matriculados"}]},
+                                100
+                            ]
+                        }
+                    }
+                }
+            },
+            {
+                '$project': {
+                    '_id': 0,
+                    'centro_de_ensino':'$_id',
+                    'centro_descricao':1,
+                    'respondentes': 1,
+                    'matriculados':1,
+                    'porcentagem': {'$round': ['$porcentagem', 2]}
+                }
+
+            },
+            {
+                "$sort": {"_id": 1}
+            },
+            {
+                '$out': f'centro_por_ano_{ano}'
+            }
+            
+        ]
+    )
+    centro_por_ano_temp.drop()
