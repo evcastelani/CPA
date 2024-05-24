@@ -151,8 +151,6 @@ class CSVManagment:
             )
         return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
 
-
-
     def insertCentroDiretorCSVDatabase(database, collectionName):
         '''
         Realiza a leitura do csv centro e diretor e faz a inserção dos dados no banco de dados
