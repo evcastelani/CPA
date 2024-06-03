@@ -2,7 +2,10 @@ from src.supportFunctions.dictToTwoLists import dictToList
 from src.generationFunctions.graph.graphGenerator import controllerGraphGenerator
 from src.generationFunctions.text.textFunctions import composeTable
 from src.openAI.openAIFunctions import *
-import os
+from src.generationFunctions.relatório.compor_partes_relatorio import *
+from src.generationFunctions.relatório.gerarRelatorio import gerarRelatorioPorCurso
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
 
 def gerarGrafTabRelatorioGPT(collectionName):
     """ 
@@ -11,14 +14,13 @@ def gerarGrafTabRelatorioGPT(collectionName):
     :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
     :type CollectionName: Collection
     """
-
     for document in collectionName.find({'relatorioGraficoGPT': {'$exists': False}}):
         pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
         sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
         opcoes, pct = dictToList(sorted_pctOptDict)
         path = controllerGraphGenerator(collectionName, opcoes, pct, document["codigo_curso"], document["cd_subgrupo"], document["nu_pergunta"], pergunta_formatada)
         # table = composeTable(pergunta_formatada, sorted_pctOptDict)
-        # reportGraph = createReport(pergunta_formatada, sorted_pctOptDict)
+        reportGraph = createReport(pergunta_formatada, sorted_pctOptDict)
         # captionGraph = createCaption(pergunta_formatada)
 
         collectionName.update_one(
@@ -36,12 +38,20 @@ def gerarGrafTabRelatorioGPT(collectionName):
             }
         )
 
+def teste(collectionName):
+    for document in collectionName.find():
+        pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',document["pergunta"])
+        sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+        opcoes, pct = dictToList(sorted_pctOptDict)
+        reportGraph = createReport(pergunta_formatada, sorted_pctOptDict)
 
+        
 def gerarTodosRelatorios(collectionName):
     cursos = collectionName.distinct("nome_do_curso")
     for nome_curso in cursos:
         #Aqui entra a função de gerarRelatorioCurso
         print(nome_curso)
+
 
 
 def gerarRelatoriosPorCentro(collectionName):
@@ -50,3 +60,11 @@ def gerarRelatoriosPorCentro(collectionName):
     for nome_cursos in result:
         ...
         #Aqui entra função gerarRelatorioCurso
+
+
+
+def gerarUmRelatorioTeste(cursoEscolhido,collectionCurso ,collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, arquivo_conclusao, ano, centro_de_ensino):
+    compor_introducao(collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino)
+    compor_conclusão(collectionCursosPorCentro, arquivo_conclusao, ano)
+    gerarRelatorioPorCurso(cursoEscolhido, collectionCurso, collectionCursosPorCentro)
+    

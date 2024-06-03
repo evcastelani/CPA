@@ -69,7 +69,7 @@ def graphPlot(dirSaidaFig,cod_curso, cod_subgrupo, options,percentage, num_pergu
     fig.savefig(os.path.join(dirSaidaFig, figGraph_name))
     plt.close(fig)
 
-    path = f'{dirSaidaFig}/{figGraph_name}'
+    path = f'Figura_Grafico/{figGraph_name}'
     return path
 
 

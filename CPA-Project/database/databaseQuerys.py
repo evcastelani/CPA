@@ -55,7 +55,7 @@ def df_centro_por_curso(database,ano,centro_de_ensino):
             "$sort": {"nome_do_curso": 1}
         },
         {
-            "$out": "centro_por_curso"
+            "$out": "cursos_por_centro"
         }
     ])
 

@@ -1,4 +1,7 @@
 import re
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
+
 
 def tableInterpretationTextGenerator(pergunta, optAndPercentage):
     """
