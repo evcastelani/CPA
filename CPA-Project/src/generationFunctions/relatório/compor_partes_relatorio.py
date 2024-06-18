@@ -1,18 +1,34 @@
 import pystache
+import re
 from src.supportFunctions.ponto_2_virgula import ponto_2_virgula 
 import sys
+from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 
 
-def compor_introducao(collectionCursoPorAno,collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino):
-    with open(f'CPA-Project/components/{arquivo_intro}','r',encoding='utf-8') as f:
+def compor_introducao(collectionCentroPorAno,collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino):
+    """
+    Gera um arquivo markdown contendo as informações da introdução do relatório.
+
+    :param collectionCentroPorAno: Nome da collection que contém as informações sobre os centros.
+    :type: Collection (MongoDB)
+    :param CollectionCursosPorCentro: Nome da collection que contém informações sobre os cursos de um centro.
+    :type: Collection (MongoDB)
+    :param arquivo_intro: Nome do arquivo que contém o template da introdução do relatório
+    :type: String
+    :param ano: O ano de que será feito o relatório.
+    :type ano: Integer
+    :param centro_de_ensino: Nome do centro de ensino escolhido para a geração da tabela contendo os seus cursos
+    :type centro_de_ensino: String
+    """
+    with open(f'CPA-Project/relatorio-components/{arquivo_intro}','r',encoding='utf-8') as f:
         template = f.read()
     renderer = pystache.Renderer()
     respondentes_total = 0
     matriculas_totais = 0
     
     tabela_centros = "| Sigla | Centro   | Resp. | Matr.   |  %   |\n |------|:----:|:-----:|:---:|:---:| \n"
-    for document in collectionCursoPorAno.find():
+    for document in collectionCentroPorAno.find():
         respondentes_total += document['respondentes']
         matriculas_totais += document['matriculados']
         tabela_centros += f'| {document['centro_de_ensino']}'
@@ -39,7 +55,19 @@ def compor_introducao(collectionCursoPorAno,collectionCursosPorCentro, arquivo_i
     
 
 def compor_conclusão(collectionNameCursosPorCentro, arquivo_conclusao, ano):
-    with open(f'CPA-Project/components/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+    """
+    Compõe a conclusão criando um arquivo markdown com base no template já existente, substituindo
+    valores e criando as tabelas usadas no mesmo.
+
+    :param CollectionCursosPorCentro: Nome da collection que contém informações sobre os cursos de um centro.
+    :type: Collection (MongoDB)
+    :param arquivo_conclusao: Nome do arquivo que contém o template de conclusão do relatório 
+    :type arquivo_conclusao: String
+    :param ano: O ano de que será feito o relatório.
+    :type ano: Integer
+
+    """
+    with open(f'CPA-Project/relatorio-components/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
         template = f.read()
     renderer = pystache.Renderer()
     for document in collectionNameCursosPorCentro.find():
@@ -52,6 +80,28 @@ def compor_conclusão(collectionNameCursosPorCentro, arquivo_conclusao, ano):
         arquivo.write(f'{conclusao} \n')
     
 
-def compor_conteudoRelatório(colletionName, arquivo_intro):
-    ...
+def substituir_identificadores(filename):
+    # Lê o conteúdo do arquivo
+    directory = Path('relatorio')
+    file = f'{directory}/{filename}'
+
+    with open(filename, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+    # Encontra todos os identificadores e substitui por números sequenciais
+    index = 1
+    def replace_index(match):
+        nonlocal index
+        replacement = f'tabela {index}'
+        index += 1
+        return replacement
+    
+    # Substitui todas as ocorrências de 'tabela _index'
+    new_content = re.sub(r'tabela _index', replace_index, content)
+
+    # Salva o novo conteúdo no mesmo arquivo ou em um novo arquivo
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(new_content)
+
+
 

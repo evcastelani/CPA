@@ -43,23 +43,24 @@ def insertPercentageDictIntoDB(collectionName,dictName, optPercentage, condition
         }
     )
 
-def percentageDictGenerator(collectionName):
-    #Sem uso atualmente
+#FUNCAO SEM USO POR ENQUANTO
+# def percentageDictGenerator(collectionName):
+#     #Sem uso atualmente
     
-    """
-    Função que para documento gera um novo dict com a função percentageCalulcator e insere com a insertPercentageDictIntoDB
+#     """
+#     Função que para documento gera um novo dict com a função percentageCalulcator e insere com a insertPercentageDictIntoDB
 
-    :param collectionName: Coleção que contém os documentos que realizamos a seleção de dados
-    :type collectionName: Collection
-    ;return: None
-    :rtype: None
-    """
-    cursor = collectionName.find({}, {'cd_curso': 1, 'cd_pergunta': 1, 'opcao_e_qtdResposta': 1, 'TotalResp_do_Curso': 24})
-    print('Atualizando dicionário de porcentagem no banco de dados...')
-    i = 0
-    for value in cursor:
-        print(f"Atualizando: {round((i*100)/collectionName.count_documents({}), 0)}%")
-        optPercentage = {'opcao_e_porcentagem': percentageCalculator(value['opcao_e_qtdResposta'], value['TotalResp_do_Curso'])}
-        insertPercentageDictIntoDB(collectionName, optPercentage, 'Codigo_Curso', value['Codigo_Curso'], 'nu_pergunta', value['nu_pergunta'])
-        i += 1 
-    print("Atualização da Collection finalizada ✅")
+#     :param collectionName: Coleção que contém os documentos que realizamos a seleção de dados
+#     :type collectionName: Collection
+#     ;return: None
+#     :rtype: None
+#     """
+#     cursor = collectionName.find({}, {'cd_curso': 1, 'cd_pergunta': 1, 'opcao_e_qtdResposta': 1, 'TotalResp_do_Curso': 24})
+#     print('Atualizando dicionário de porcentagem no banco de dados...')
+#     i = 0
+#     for value in cursor:
+#         print(f"Atualizando: {round((i*100)/collectionName.count_documents({}), 0)}%")
+#         optPercentage = {'opcao_e_porcentagem': percentageCalculator(value['opcao_e_qtdResposta'], value['TotalResp_do_Curso'])}
+#         insertPercentageDictIntoDB(collectionName, optPercentage, 'Codigo_Curso', value['Codigo_Curso'], 'nu_pergunta', value['nu_pergunta'])
+#         i += 1 
+#     print("Atualização da Collection finalizada ✅")

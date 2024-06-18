@@ -1,9 +1,9 @@
-def df_centro_por_curso(database,ano,centro_de_ensino):
-    cursos_e_centros = database['centro_e_curso']
+def df_cursos_por_centro(database,ano,centro_de_ensino):
+    cursos_e_centros = database['cursos_e_centros']
     curso = database['curso']
 
     # Realizar a agregação de dados
-    results = cursos_e_centros.aggregate([
+    results = list(cursos_e_centros.aggregate([
         {
             "$lookup": {
                 "from": "curso",
@@ -53,12 +53,10 @@ def df_centro_por_curso(database,ano,centro_de_ensino):
         },
         {
             "$sort": {"nome_do_curso": 1}
-        },
-        {
-            "$out": "cursos_por_centro"
         }
-    ])
+    ]))
 
+    return results
 
 def df_centro_por_ano(database, ano):
     curso = database['curso']

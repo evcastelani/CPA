@@ -7,30 +7,33 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 
 def gerarRelatorioPorCurso(curso_escolhido, collectionCurso, collectionCursosPorCentro):
-    #Talvez separar parte inicial para virar uma função compor capa
+    """
+    Gerar um relatório de apenas um curso.
 
+    :param curso_escolhido: Nome do curso que você quer gerar o relatório md
+    :type curso_escolhido: String
+    :param collectionCurso: Nome da collection que tem as informações do csv principal
+    :type collectionCurso: Collection
+    :param collectionCursosPorCentro: Nome da collection que tem as informações para gerar a 
+    introdução do relatório.
+    :type collectionCursosPorCentro: Collection
+    """
+
+
+    #Talvez separar parte inicial para virar uma função compor capa
+    
     directory = Path('relatorio')
     directory.mkdir(parents=True, exist_ok=True)
     file = f'{directory}/{curso_escolhido}.md'
+
     with open(file, 'w', buffering=-1,encoding='utf-8') as arquivo:
-        # print("---", file=arquivo)
-        # print("  title: \"Relatório do Curso de {}\"".format(curso_escolhido), file=arquivo)
-        # print("  titlepage: true", file=arquivo)
-        # print("  titlepage-background: \"relatorio/capa.png\"", file=arquivo)
-        # print("  titlepage-rule-color: \"#B3B3B3\"", file=arquivo)
-        # print("  page-background: \"relatorio/interna02.png\"", file=arquivo)
-        # print("  page-background-opacity: '1.0'", file=arquivo)
-        # print("  author: [CPA-Comissão Própria de Avaliação]", file=arquivo)
-        # print("  lang: \"pt-BR\"", file=arquivo)
-        # print("---", file=arquivo)
-        # print("", file=arquivo)
 
         arquivo.write("---\n")
         arquivo.write("title: \"Relatório do Curso de {}\"\n".format(curso_escolhido))
         arquivo.write("titlepage: true\n")
-        arquivo.write("titlepage-background: \"relatorio/capa.png\"\n")
-        arquivo.write("titlepage-rule-color: \"#B3B3B3\"\n")
-        arquivo.write("page-background: \"relatorio/interna02.png\"\n")
+        arquivo.write("titlepage-background: \"capa\"\n")
+        arquivo.write("titlepage-rule-color: \"B3B3B3\"\n")
+        arquivo.write("page-background: \"interna02\"\n")
         arquivo.write("page-background-opacity: '1.0'\n")
         arquivo.write("author: [CPA-Comissão Própria de Avaliação]\n")
         arquivo.write("lang: \"pt-BR\"\n")
